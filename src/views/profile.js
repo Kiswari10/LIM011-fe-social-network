@@ -1,10 +1,11 @@
 import { eventSignOut } from '../controllers/login-controller.js';
-import { getUser } from '../controllers/profile-controller.js';
-import { createPost, showPublication } from '../controllers/post-controller.js';
+import { getUser, userActive } from '../controllers/profile-controller.js';
+import { createPost } from '../controllers/post-controller.js';
 import { postView } from './posts.js';
+import { userView } from './userView.js';
 
 
-export default (posts, user) => {
+export default (posts) => {
   const viewProfile = `
         <header>
             <nav>
@@ -13,15 +14,7 @@ export default (posts, user) => {
             </nav>
         </header>
         <div class="body">
-            <div class="profile-section">
-                <img class="cover-page" src="../src/img/fondo.jpg" alt="portada">
-                <div class="info-user">
-                    <img id="photo" class="avatar" src="" alt="avatar" >
-                    <div>
-                        <p id="name" class="user" ></p>
-                        <p id="email" class="user-description"></p>
-                    </div>
-                </div>
+            <div id="user-container" class="profile-section">
             </div>
             <div class="publications-section">
                 <form class="form">
@@ -52,12 +45,22 @@ export default (posts, user) => {
   file.addEventListener('change', () => {
     divElement.querySelector('#input-value').innerHTML = file.value.replace(/([^\\]*\\)*/, '');
   });
+  // PINTADO DE DATOS DEL USUARIO
+  const userContainer = divElement.querySelector('#user-container');
+  getUser((users) => {
+    users.forEach((user) => {
+      if (user.id === userActive().uid) {
+        userContainer.appendChild(userView(user));
+      }
+    });
+  });
+  // PINTADO DE POSTS
   const allPublications = divElement.querySelector('#all-publications');
   posts.forEach((element) => {
     allPublications.appendChild(postView(element));
   });
   divElement.querySelector('#btn-close').addEventListener('click', eventSignOut);
-  getUser();
+
   divElement.querySelector('#btn-post').addEventListener('click', createPost);
   return divElement;
 };

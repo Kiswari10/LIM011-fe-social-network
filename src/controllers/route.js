@@ -17,8 +17,10 @@ const changeView = (route) => {
     }
     case '#/profile': {
       showPost((arrDeData) => {
+        container.innerHTML = '';
         container.appendChild(components.profile(arrDeData));
       });
+      break;
     }
     default:
       break;

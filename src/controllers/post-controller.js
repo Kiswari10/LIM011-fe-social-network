@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import {
-  addPost, deletePost, updatePost, showPost, saveLikes, showLikes, addComments, showComments,
+  addPost, deletePost, updatePost, showPost,
+  addComments, showComments, deleteComment, updateComment, addLikes, deleteLikes, showLikes,
 } from '../models/model-firebase.js';
 import { userActive } from './profile-controller.js';
 
@@ -25,6 +26,7 @@ export const createPost = (event) => {
     name_user: user.displayName,
     date_post: datePublication(date),
     status: statusPost,
+    likeEmail: '',
   };
   addPost('post', obj)
     .then((docRef) => {
@@ -61,8 +63,10 @@ export const showPublication = () => {
   showPost();
 };
 
-export const saveLikePublication = (idPost, obj, ide) => {
-  saveLikes(idPost, obj, ide)
+// LIKES
+
+export const saveLikePublication = (idPost, emailUser) => {
+  addLikes(idPost, emailUser)
     .then(() => {
       console.log('like registrado');
     })
@@ -70,40 +74,77 @@ export const saveLikePublication = (idPost, obj, ide) => {
       console.error('Error adding document: ', error);
     });
 };
+export const deleteLikePublication = (idPost, emailUser) => {
+  deleteLikes(idPost, emailUser)
+    .then(() => {
+      console.log('like borrado');
+      console.log('Document successfully deleted!');
+    })
+    .catch((error) => {
+      console.error('Error removing document: ', error);
+    });
+};
 
 export const showLikePublication = (idPost) => {
   // const btnLikes = document.querySelector(`#btn-like-${idPost}`);
   // const btnNonLikes = document.querySelector(`#btn-nonlike-${idPost}`);
-  const countLikes = document.querySelector(`#count-likes-${idPost}`);
+  // const countLikes = document.querySelector(`#count-likes-${idPost}`);
   showLikes(idPost)
-    .onSnapshot((querySnapshot) => {
-      let count = 0;
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-        count += 1;
-      });
-      console.log(count);
-      countLikes.innerHTML = count;
+    .then((doc) => {
+      const allLikes = doc.data().likeEmail;
+      console.log(doc.data().likeEmail);
+      if (allLikes.length === 0) {
+        saveLikePublication(idPost, userActive().email);
+      } else {
+        allLikes.forEach((like) => {
+          console.log(like);
+          if (like !== userActive().email) {
+            saveLikePublication(idPost, userActive().email);
+          } else {
+            deleteLikePublication(idPost, userActive().email);
+          }
+        });
+      }
+    })
+    .catch((error) => {
+      console.log('Error getting document:', error);
     });
 };
+
+// COMMENTS
 
 export const createComments = (idPost, obj) => {
   addComments(idPost, obj)
     .then((docRef) => {
       console.log('Document written with ID: ', docRef);
-      document.querySelector('#comment-post').value = '';
+      document.querySelector(`#comment-post-${idPost}`).value = '';
     })
     .catch((error) => {
       console.error('Error adding document: ', error);
     });
 };
 
-export const showCommentPublication = (idPost) => {
-  showComments(idPost)
-    .then((querySnapshot) => {
-      document.querySelector(`#${idPost}`).innerHTML = '';
-      querySnapshot.forEach((doc) => {
-        //  commentView(doc);
-      });
+export const showCommentPublication = (idPost, callback) => {
+  showComments(idPost, callback);
+};
+
+export const deleteCommentPublication = (idPost, idComment) => {
+  deleteComment(idPost, idComment)
+    .then(() => {
+      console.log('Document successfully deleted!');
+    })
+    .catch((error) => {
+      console.error('Error removing document: ', error);
+    });
+};
+
+export const updateCommentPublication = (idPost, idComment, obj) => {
+  updateComment(idPost, idComment, obj)
+    .then(() => {
+      console.log('Document successfully updated!');
+    })
+    .catch((error) => {
+    // The document probably doesn't exist.
+      console.error('Error updating document: ', error);
     });
 };
