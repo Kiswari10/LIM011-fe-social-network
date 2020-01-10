@@ -187,10 +187,10 @@ anterior en la siguiente sección.
 
 ### Organización en Github
 
-* [ ] Projects
-* [ ] Issues
-* [ ] Labels
-* [ ] Milestones
+* [x] Projects
+* [x] Issues
+* [x] Labels
+* [x] Milestones
 
 ### Buenas prácticas de desarrollo
 
