@@ -1,7 +1,7 @@
 export const userView = (userInfo) => {
   const user = document.createElement('div');
   const viewUser = `
-    <img class="cover-page" src="../img/fondo.jpg" alt="portada">
+    <img class="cover-page" src="img/fondo.jpg" alt="portada">
     <div class="info-user">
         <img id="photo" class="avatar" src="${userInfo.photoURL}" alt="avatar" >
         <div>

@@ -3,11 +3,11 @@ import { signInUser, eventGoogleSignIn, eventFacebookSignIn } from '../controlle
 export default () => {
   const viewLogin = `
     <div class="login-register-header flex">
-      <img class="login-register-img" src="../img/fondo.jpg" alt="Mujer programando">
+      <img class="login-register-img" src="img/fondo.jpg" alt="Mujer programando">
     </div>
     <div class="login-register-section flex">
       <div class="login-register-body flex">
-        <img class="" src="../img/logo6.png" alt="logo CodeGirl" width=170px>
+        <img class="" src="img/logo6.png" alt="logo CodeGirl" width=170px>
         <h3>¡Bienvenida, coder!</h3>
         <input class="input-log-reg style" type="email" placeholder="Ingresa tu correo"></br>
         <input class="input-log-reg style" type="password" placeholder="Ingresa tu contraseña"></br>
